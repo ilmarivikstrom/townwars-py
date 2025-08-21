@@ -1,0 +1,18 @@
+{
+    "python.analysis.typeCheckingMode": "strict",
+    "search.exclude": {
+        "**/.git": true,
+        "**/.venv": true
+    },
+    "editor.rulers": [120],
+
+    "[python]": {
+        "editor.formatOnType": true,
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.fixAll": "explicit",
+          "source.organizeImports": "explicit"
+        },
+        "editor.defaultFormatter": "charliermarsh.ruff"
+      },
+}
