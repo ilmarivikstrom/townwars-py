@@ -4,7 +4,7 @@
         "**/.git": true,
         "**/.venv": true
     },
-    "editor.rulers": [120],
+    "editor.rulers": [88],
 
     "[python]": {
         "editor.formatOnType": true,
