@@ -4,6 +4,7 @@ from src.config import Config
 from src.phases.exit import exit_phase
 from src.phases.gameplay import gameplay_phase
 from src.phases.mainmenu import mainmenu_phase
+from src.phases.editor import editor_phase
 from src.phases.phase import Phase
 from src.state import State
 from src.ui.text_display import TextDisplay
@@ -44,11 +45,18 @@ class GameLoop:
 
         if self.state.game_phase == Phase.MAIN_MENU:
             self.phase_display.set_text(
-                "Phase: Main Menu\n\nPress ENTER to start\nPress Q to quit",
+                "Phase: Main Menu\n\n"
+                "Press ENTER to start\n"
+                "Press E to open editor\n"
+                "Press Q to quit",
             )
         elif self.state.game_phase == Phase.GAMEPLAY:
             self.phase_display.set_text(
                 "Phase: Gameplay\n\nPress ESC to return to main menu",
+            )
+        elif self.state.game_phase == Phase.EDITOR:
+            self.phase_display.set_text(
+                "Phase: Editor\n\nPress ESC to return to main menu",
             )
         else:
             pass
@@ -62,6 +70,8 @@ class GameLoop:
                 exit_phase()
             elif self.state.game_phase == Phase.GAMEPLAY:
                 gameplay_phase(self.state, self.screen)
+            elif self.state.game_phase == Phase.EDITOR:
+                editor_phase(self.state, self.screen)
 
             self._update_displays()
 

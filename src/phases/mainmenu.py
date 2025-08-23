@@ -1,5 +1,5 @@
 import pygame as pg
-from pygame.locals import K_RETURN, KEYDOWN, QUIT, K_q
+from pygame.locals import K_RETURN, KEYDOWN, QUIT, K_q, K_e
 
 from src.colors import GRAY20
 from src.state import Phase, State
@@ -18,3 +18,6 @@ def mainmenu_phase(state: State, screen: pg.Surface) -> None:
         if event.type == KEYDOWN and event.key == K_RETURN:
             state.game_phase = Phase.GAMEPLAY
             logger.info("Mainmenu -> Gameplay.")
+        if event.type == KEYDOWN and event.key == K_e:
+            state.game_phase = Phase.EDITOR
+            logger.info("Mainmenu -> Editor.")
