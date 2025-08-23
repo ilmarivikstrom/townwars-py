@@ -23,7 +23,7 @@ class GameLoop:
         logger.info("Gameloop initialized.")
 
     def _update_displays(self, phase: Phase) -> None:
-        fps_text = f"frame: {self.state.current_frame}\nfps: {self.clock.get_fps():.1f}\ntime: {pg.time.get_ticks() / 1000:.1f}s\ndt: {self.clock.get_time():.1f}ms"
+        fps_text = f"frame: {self.state.current_frame}\nfps: {self.clock.get_fps():.1f}\ntime: {pg.time.get_ticks() / 1000:.1f}s\ndt: {self.clock.get_time():.1f}ms"  # noqa: E501
         self.fps_display.set_text(fps_text)
         self.fps_display.draw(self.screen)
 

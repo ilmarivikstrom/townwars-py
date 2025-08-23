@@ -46,7 +46,7 @@ class TextDisplay:
 
         for line in self.lines:
             if line.strip():  # Non-empty lines
-                line_surface = self.font.render(line, True, self.text_color)
+                line_surface = self.font.render(line, True, self.text_color)  # noqa: FBT003
                 line_surfaces.append(line_surface)
                 max_line_width = max(max_line_width, line_surface.get_width())
             else:
