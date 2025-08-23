@@ -7,5 +7,5 @@ logger = setup_logging()
 class State:
     def __init__(self) -> None:
         self.game_phase: Phase = Phase.MAIN_MENU
-        self.current_tick: int = 0
+        self.current_frame: int = 0
         logger.info("State initialized. Currently in Mainmenu phase.")

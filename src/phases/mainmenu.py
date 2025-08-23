@@ -2,7 +2,6 @@ import pygame as pg
 from pygame.locals import K_RETURN, KEYDOWN, QUIT, K_q
 
 from src.colors import GRAY20
-from src.config import Config
 from src.state import Phase, State
 from src.utils.logging import setup_logging
 
@@ -10,7 +9,6 @@ logger = setup_logging()
 
 
 def mainmenu_phase(state: State, screen: pg.Surface) -> None:
-    pg.display.set_caption(f"{Config.TITLE_CAPTION} - MAINMENU")
     screen.fill(GRAY20)
     for event in pg.event.get():
         if (event.type == QUIT) or (event.type == KEYDOWN and event.key == K_q):
