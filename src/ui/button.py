@@ -1,6 +1,6 @@
 import pygame as pg
 
-from src.colors import BASE, PEACH, TEXT
+from src.colors import BASE, PEACH, RGB, TEXT
 
 
 class Button:
@@ -17,12 +17,13 @@ class Button:
         self.text = text
         self.padding = padding
         self.radius = radius
-        self.original_text_color: tuple[int, int, int] = TEXT
-        self.original_background_color: tuple[int, int, int, int] = BASE
+
+        self.original_text_color: RGB = TEXT
+        self.original_background_color: RGB = BASE
+        self.hover_text_color: RGB = BASE
+        self.hover_background_color: RGB = PEACH
 
         self.is_hovered = False
-        self.hover_text_color = BASE
-        self.hover_background_color = PEACH
 
         self.font = pg.font.Font(pg.font.match_font("monospace"), font_size)
 
@@ -74,9 +75,9 @@ class Button:
         if self.is_hovered:
             pg.draw.rect(
                 self.background_surface,
-                (150, 150, 150),  # White color
+                (150, 150, 150),
                 rect,
-                width=1,  # Border width
+                width=1,
                 border_radius=self.radius,
             )
 
