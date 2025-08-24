@@ -14,6 +14,13 @@ class RGB(Color):
         return f"#{self.red:02X}{self.green:02X}{self.blue:02X}"
 
 
+BASE = RGB(30, 30, 46)
+CRUST = RGB(17, 17, 27)
+MANTLE = RGB(24, 24, 37)
+PEACH = RGB(250, 179, 135)
+TEXT = RGB(205, 214, 244)
+
+
 # Color constants
 ALICEBLUE = RGB(240, 248, 255)
 ANTIQUEWHITE = RGB(250, 235, 215)

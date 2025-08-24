@@ -1,10 +1,10 @@
 import pygame as pg
 
 from src.config import Config
+from src.phases.editor import editor_phase
 from src.phases.exit import exit_phase
 from src.phases.gameplay import gameplay_phase
 from src.phases.mainmenu import mainmenu_phase
-from src.phases.editor import editor_phase
 from src.phases.phase import Phase
 from src.state import State
 from src.ui.text_display import TextDisplay
@@ -67,7 +67,7 @@ class GameLoop:
             if self.state.game_phase == Phase.MAIN_MENU:
                 mainmenu_phase(self.state, self.screen)
             elif self.state.game_phase == Phase.EXIT:
-                exit_phase()
+                exit_phase(self.screen)
             elif self.state.game_phase == Phase.GAMEPLAY:
                 gameplay_phase(self.state, self.screen)
             elif self.state.game_phase == Phase.EDITOR:

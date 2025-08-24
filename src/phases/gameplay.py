@@ -4,7 +4,7 @@ from pygame.constants import (
     KEYDOWN,
 )
 
-from src.colors import CORNFLOWERBLUE
+from src.colors import MANTLE
 from src.state import Phase, State
 from src.utils.logging import setup_logging
 
@@ -12,7 +12,7 @@ logger = setup_logging()
 
 
 def gameplay_phase(state: State, screen: pg.Surface) -> None:
-    screen.fill(CORNFLOWERBLUE)  # memes
+    screen.fill(MANTLE)
 
     for event in pg.event.get():
         if event.type == KEYDOWN and event.key == K_ESCAPE:
