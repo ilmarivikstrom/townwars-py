@@ -1,10 +1,10 @@
 import pygame as pg
 
 from src.config import Config
-from src.phases.editor import editor_phase
-from src.phases.exit import exit_phase
-from src.phases.gameplay import gameplay_phase
-from src.phases.mainmenu import mainmenu_phase
+from src.phases.editor import Editor
+from src.phases.exit import Exit
+from src.phases.gameplay import Gameplay
+from src.phases.mainmenu import MainMenu
 from src.phases.phase import Phase
 from src.state import State
 from src.ui.text_display import TextDisplay
@@ -15,6 +15,7 @@ logger = setup_logging()
 
 class GameLoop:
     def __init__(self) -> None:
+        pg.display.set_caption(Config.TITLE_CAPTION)
         self.screen: pg.Surface = pg.display.set_mode(
             (Config.SCREEN_WIDTH, Config.SCREEN_HEIGHT),
         )
@@ -34,11 +35,16 @@ class GameLoop:
             background_alpha=180,
         )
         self.state = State()
-        pg.display.set_caption(Config.TITLE_CAPTION)
+
         self.clock = pg.time.Clock()
         logger.info("Gameloop initialized.")
 
-    def _update_displays(self) -> None:
+        self.mainmenu = MainMenu()
+        self.gameplay = Gameplay()
+        self.editor = Editor()
+        self.exit = Exit()
+
+    def _update_debug_displays(self) -> None:
         fps_text = f"frame: {self.state.current_frame}\nfps: {self.clock.get_fps():.1f}\ntime: {pg.time.get_ticks() / 1000:.1f}s\ndt: {self.clock.get_time():.1f}ms"  # noqa: E501
         self.fps_display.set_text(fps_text)
         self.fps_display.draw(self.screen)
@@ -64,16 +70,30 @@ class GameLoop:
 
     def loop(self, fps: int = 60) -> None:
         while True:
-            if self.state.game_phase == Phase.MAIN_MENU:
-                mainmenu_phase(self.state, self.screen)
-            elif self.state.game_phase == Phase.EXIT:
-                exit_phase(self.screen)
-            elif self.state.game_phase == Phase.GAMEPLAY:
-                gameplay_phase(self.state, self.screen)
-            elif self.state.game_phase == Phase.EDITOR:
-                editor_phase(self.state, self.screen)
+            for event in pg.event.get():
+                if self.state.game_phase == Phase.MAIN_MENU:
+                    self.mainmenu.handle_event(event, self.state)
+                elif self.state.game_phase == Phase.EXIT:
+                    self.exit.handle_event(event, self.state)
+                elif self.state.game_phase == Phase.GAMEPLAY:
+                    self.gameplay.handle_event(event, self.state)
+                elif self.state.game_phase == Phase.EDITOR:
+                    self.editor.handle_event(event, self.state)
 
-            self._update_displays()
+            if self.state.game_phase == Phase.MAIN_MENU:
+                self.mainmenu.update()
+                self.mainmenu.draw(self.screen)
+            elif self.state.game_phase == Phase.EXIT:
+                self.exit.update()
+                self.exit.draw(self.screen)
+            elif self.state.game_phase == Phase.GAMEPLAY:
+                self.gameplay.update()
+                self.gameplay.draw(self.screen)
+            elif self.state.game_phase == Phase.EDITOR:
+                self.editor.update()
+                self.editor.draw(self.screen)
+
+            self._update_debug_displays()
 
             self.state.current_frame += 1
             pg.display.update()

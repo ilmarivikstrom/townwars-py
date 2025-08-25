@@ -11,10 +11,17 @@ from src.utils.logging import setup_logging
 logger = setup_logging()
 
 
-def editor_phase(state: State, screen: pg.Surface) -> None:
-    screen.fill(CORAL)  # memes
+class Editor:
+    def __init__(self) -> None:
+        pass
 
-    for event in pg.event.get():
+    def handle_event(self, event: pg.event.Event, state: State) -> None:
         if event.type == KEYDOWN and event.key == K_ESCAPE:
-            state.game_phase = Phase.MAIN_MENU
             logger.info("Editor -> Mainmenu.")
+            state.game_phase = Phase.MAIN_MENU
+
+    def update(self) -> None:
+        pass
+
+    def draw(self, screen: pg.Surface) -> None:
+        screen.fill(CORAL)

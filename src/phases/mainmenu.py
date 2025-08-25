@@ -1,5 +1,4 @@
 import pygame as pg
-from pygame.locals import K_RETURN, KEYDOWN, QUIT, K_e, K_q
 
 from src.colors import CRUST
 from src.config import Config
@@ -9,42 +8,66 @@ from src.utils.logging import setup_logging
 
 logger = setup_logging()
 
-start_button = Button(
-    center=(Config.SCREEN_WIDTH / 2, Config.SCREEN_HEIGHT / 2),
-    text="Start Game",
-)
 
-editor_button = Button(
-    center=(Config.SCREEN_WIDTH / 2, Config.SCREEN_HEIGHT / 2 + 50),
-    text="Editor",
-)
+class MainMenu:
+    def __init__(self) -> None:
+        self.components = []
 
-exit_button = Button(
-    center=(Config.SCREEN_WIDTH / 2, Config.SCREEN_HEIGHT / 2 + 100),
-    text="Exit",
-)
+        start_button = Button(
+            on_click=self._on_start_click,
+            center=(Config.SCREEN_WIDTH / 2, Config.SCREEN_HEIGHT / 2),
+            text="Start Game",
+        )
+        editor_button = Button(
+            on_click=self._on_editor_click,
+            center=(Config.SCREEN_WIDTH / 2, Config.SCREEN_HEIGHT / 2 + 50),
+            text="Editor",
+        )
+        exit_button = Button(
+            on_click=self._on_exit_click,
+            center=(Config.SCREEN_WIDTH / 2, Config.SCREEN_HEIGHT / 2 + 100),
+            text="Exit",
+        )
+        self.components.append(start_button)
+        self.components.append(editor_button)
+        self.components.append(exit_button)
 
+    def _on_start_click(self) -> None:
+        logger.info("Mainmenu -> Gameplay.")
+        self.state.game_phase = Phase.GAMEPLAY
 
-def mainmenu_phase(state: State, screen: pg.Surface) -> None:
-    screen.fill(CRUST)
+    def _on_editor_click(self) -> None:
+        logger.info("Mainmenu -> Editor.")
+        self.state.game_phase = Phase.EDITOR
 
-    for event in pg.event.get():
-        if (event.type == QUIT) or (event.type == KEYDOWN and event.key == K_q):
-            state.game_phase = Phase.EXIT
+    def _on_exit_click(self) -> None:
+        logger.info("Mainmenu -> Exit.")
+        self.state.game_phase = Phase.EXIT
+
+    def handle_event(self, event: pg.event.Event, state: State) -> None:
+        self.state = state
+        if (event.type == pg.QUIT) or (
+            event.type == pg.KEYDOWN and event.key == pg.K_q
+        ):
             logger.info("Mainmenu -> Exit.")
+            state.game_phase = Phase.EXIT
             return
-        if event.type == KEYDOWN and event.key == K_RETURN:
-            state.game_phase = Phase.GAMEPLAY
+        if event.type == pg.KEYDOWN and event.key == pg.K_RETURN:
             logger.info("Mainmenu -> Gameplay.")
+            state.game_phase = Phase.GAMEPLAY
             return
-        if event.type == KEYDOWN and event.key == K_e:
-            state.game_phase = Phase.EDITOR
+        if event.type == pg.KEYDOWN and event.key == pg.K_e:
             logger.info("Mainmenu -> Editor.")
+            state.game_phase = Phase.EDITOR
             return
+        for component in self.components:
+            component.handle_event(event)
 
-    editor_button.update()
-    start_button.update()
-    exit_button.update()
-    editor_button.draw(screen)
-    start_button.draw(screen)
-    exit_button.draw(screen)
+    def update(self) -> None:
+        for component in self.components:
+            component.update()
+
+    def draw(self, screen: pg.Surface) -> None:
+        screen.fill(CRUST)
+        for component in self.components:
+            component.draw(screen)

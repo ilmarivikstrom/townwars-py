@@ -11,10 +11,17 @@ from src.utils.logging import setup_logging
 logger = setup_logging()
 
 
-def gameplay_phase(state: State, screen: pg.Surface) -> None:
-    screen.fill(MANTLE)
+class Gameplay:
+    def __init__(self) -> None:
+        pass
 
-    for event in pg.event.get():
+    def handle_event(self, event: pg.event.Event, state: State) -> None:
         if event.type == KEYDOWN and event.key == K_ESCAPE:
             state.game_phase = Phase.MAIN_MENU
             logger.info("Gameplay -> Mainmenu.")
+
+    def update(self) -> None:
+        pass
+
+    def draw(self, screen: pg.Surface) -> None:
+        screen.fill(MANTLE)
