@@ -4,6 +4,7 @@ from src.colors import CRUST
 from src.config import Config
 from src.state import Phase, State
 from src.ui.button import Button
+from src.ui.text_display import TextDisplay
 from src.utils.logging import setup_logging
 
 logger = setup_logging()
@@ -15,22 +16,42 @@ class MainMenu:
 
         start_button = Button(
             on_click=self._on_start_click,
-            center=(Config.SCREEN_WIDTH / 2, Config.SCREEN_HEIGHT / 2),
+            center=(Config.SCREEN_WIDTH // 2, Config.SCREEN_HEIGHT // 2),
             text="Start Game",
         )
         editor_button = Button(
             on_click=self._on_editor_click,
-            center=(Config.SCREEN_WIDTH / 2, Config.SCREEN_HEIGHT / 2 + 50),
+            center=(Config.SCREEN_WIDTH // 2, Config.SCREEN_HEIGHT // 2 + 50),
             text="Editor",
         )
         exit_button = Button(
             on_click=self._on_exit_click,
-            center=(Config.SCREEN_WIDTH / 2, Config.SCREEN_HEIGHT / 2 + 100),
+            center=(Config.SCREEN_WIDTH // 2, Config.SCREEN_HEIGHT // 2 + 100),
             text="Exit",
         )
         self.components.append(start_button)
         self.components.append(editor_button)
         self.components.append(exit_button)
+
+        title_text = TextDisplay(
+            center=(Config.SCREEN_WIDTH // 2, 200),
+            font_size=72,
+            padding=10,
+            max_width=400,
+            background_alpha=0,
+            text="TOWNWARS",
+        )
+
+        subtitle_text = TextDisplay(
+            center=(Config.SCREEN_WIDTH // 2, 240),
+            font_size=14,
+            padding=10,
+            max_width=400,
+            background_alpha=0,
+            text="Hate your neighbors? Fight them!",
+        )
+        self.components.append(title_text)
+        self.components.append(subtitle_text)
 
     def _on_start_click(self) -> None:
         logger.info("Mainmenu -> Gameplay.")

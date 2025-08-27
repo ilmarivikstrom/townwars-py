@@ -8,12 +8,19 @@ class Button(Component):
     def __init__(
         self,
         on_click: callable,
-        center: tuple[int, int],
-        text: str,
+        origin: tuple[int, int] | None = None,
+        center: tuple[int, int] | None = None,
+        text: str = "",
         font_size: int = 16,
         padding: int = 12,
     ) -> None:
+        if origin is None and center is None:
+            raise ValueError("Either origin or center must be provided")
+        if origin is not None and center is not None:
+            raise ValueError("Only one of origin or center should be provided")
+
         self.on_click = on_click
+        self.origin = origin
         self.center = center
         self.font_size = font_size
         self.text = text
@@ -28,12 +35,13 @@ class Button(Component):
         self.font = pg.font.Font(pg.font.match_font("monospace"), font_size)
         self.text_surface = None
         self.background_surface = None
+        self.rect = pg.Rect(0, 0, 0, 0)
 
         self._update_surfaces()
 
     def handle_event(self, event: pg.event.Event) -> None:
         if event.type == pg.MOUSEMOTION:
-            self.is_hovered = self._get_rect().collidepoint(event.pos)
+            self.is_hovered = self.rect.collidepoint(event.pos)
             self._update_surfaces()
         if event.type == pg.MOUSEBUTTONDOWN and self.is_hovered and self.on_click:
             self.on_click()
@@ -45,17 +53,10 @@ class Button(Component):
         if self.background_surface is None or self.text_surface is None:
             return
 
-        # Calculate positions so origin is at the center
-        bg_width = self.background_surface.get_width()
-        bg_height = self.background_surface.get_height()
-        bg_x = self.center[0] - bg_width // 2
-        bg_y = self.center[1] - bg_height // 2
+        screen.blit(self.background_surface, self.rect)
 
-        screen.blit(self.background_surface, (bg_x, bg_y))
-
-        # Calculate text position relative to the background's top-left corner
-        text_x = bg_x + self.padding
-        text_y = bg_y + self.padding
+        text_x = self.rect.x + self.padding
+        text_y = self.rect.y + self.padding
         screen.blit(self.text_surface, (text_x, text_y))
 
     def _set_text(self, text: str) -> None:
@@ -66,6 +67,10 @@ class Button(Component):
         if not self.text:
             self.text_surface = None
             self.background_surface = None
+            if self.center is not None:
+                self.rect = pg.Rect(self.center[0], self.center[1], 0, 0)
+            else:
+                self.rect = pg.Rect(self.origin[0], self.origin[1], 0, 0)
             return
 
         if self.is_hovered:
@@ -106,18 +111,21 @@ class Button(Component):
                 border_radius=3,
             )
 
-    def _get_rect(self) -> pg.Rect:
-        if self.background_surface is None:
-            return pg.Rect(self.center[0], self.center[1], 0, 0)
+        # Update the rect with the new dimensions
+        if self.center is not None:
+            self.rect = pg.Rect(0, 0, bg_width, bg_height)
+            self.rect.center = self.center
+        else:
+            self.rect = pg.Rect(self.origin[0], self.origin[1], bg_width, bg_height)
 
-        bg_width = self.background_surface.get_width()
-        bg_height = self.background_surface.get_height()
-        bg_x = self.center[0] - bg_width // 2
-        bg_y = self.center[1] - bg_height // 2
+    def set_center(self, center: tuple[int, int]) -> None:
+        self.rect.center = center
+        self.center = center
+        if self.origin is not None:
+            self.origin = (self.rect.x, self.rect.y)
 
-        return pg.Rect(
-            bg_x,
-            bg_y,
-            bg_width,
-            bg_height,
-        )
+    def set_origin(self, origin: tuple[int, int]) -> None:
+        self.origin = origin
+        self.rect.x, self.rect.y = origin
+        if self.center is not None:
+            self.center = self.rect.center
