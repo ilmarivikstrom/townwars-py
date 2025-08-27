@@ -1,3 +1,5 @@
+from typing import TYPE_CHECKING
+
 import pygame as pg
 
 from src.colors import CRUST
@@ -7,12 +9,15 @@ from src.ui.button import Button
 from src.ui.text_display import TextDisplay
 from src.utils.logging import setup_logging
 
+if TYPE_CHECKING:
+    from src.component import Component
+
 logger = setup_logging()
 
 
 class MainMenu:
     def __init__(self) -> None:
-        self.components = []
+        self.ui_components: list[Component] = []
 
         start_button = Button(
             on_click=self._on_start_click,
@@ -29,9 +34,9 @@ class MainMenu:
             center=(Config.SCREEN_WIDTH // 2, Config.SCREEN_HEIGHT // 2 + 100),
             text="Exit",
         )
-        self.components.append(start_button)
-        self.components.append(editor_button)
-        self.components.append(exit_button)
+        self.ui_components.append(start_button)
+        self.ui_components.append(editor_button)
+        self.ui_components.append(exit_button)
 
         title_text = TextDisplay(
             center=(Config.SCREEN_WIDTH // 2, 200),
@@ -50,8 +55,8 @@ class MainMenu:
             background_alpha=0,
             text="Hate your neighbors? Fight them!",
         )
-        self.components.append(title_text)
-        self.components.append(subtitle_text)
+        self.ui_components.append(title_text)
+        self.ui_components.append(subtitle_text)
 
     def _on_start_click(self) -> None:
         logger.info("Mainmenu -> Gameplay.")
@@ -81,14 +86,14 @@ class MainMenu:
             logger.info("Mainmenu -> Editor.")
             state.game_phase = Phase.EDITOR
             return
-        for component in self.components:
+        for component in self.ui_components:
             component.handle_event(event)
 
     def update(self) -> None:
-        for component in self.components:
+        for component in self.ui_components:
             component.update()
 
     def draw(self, screen: pg.Surface) -> None:
         screen.fill(CRUST)
-        for component in self.components:
+        for component in self.ui_components:
             component.draw(screen)

@@ -15,4 +15,5 @@
         },
         "editor.defaultFormatter": "charliermarsh.ruff"
       },
+      "cursorpyright.analysis.typeCheckingMode": "strict"
 }

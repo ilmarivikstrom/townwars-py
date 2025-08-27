@@ -1,7 +1,9 @@
 import pygame as pg
 
+from src.component import Component
 
-class TextDisplay:
+
+class TextDisplay(Component):
     def __init__(
         self,
         origin: tuple[int, int] | None = None,
@@ -54,13 +56,13 @@ class TextDisplay:
             self.background_surface = None
             if self.center is not None:
                 self.rect = pg.Rect(self.center[0], self.center[1], 0, 0)
-            else:
+            elif self.origin is not None:
                 self.rect = pg.Rect(self.origin[0], self.origin[1], 0, 0)
             return
 
         self.lines = self.text.split("\n")
 
-        line_surfaces = []
+        line_surfaces: list[pg.Surface] = []
         max_line_width = 0
 
         for line in self.lines:
@@ -78,7 +80,7 @@ class TextDisplay:
             self.background_surface = None
             if self.center is not None:
                 self.rect = pg.Rect(self.center[0], self.center[1], 0, 0)
-            else:
+            elif self.origin is not None:
                 self.rect = pg.Rect(self.origin[0], self.origin[1], 0, 0)
             return
 
@@ -106,7 +108,7 @@ class TextDisplay:
         if self.center is not None:
             self.rect = pg.Rect(0, 0, bg_width, bg_height)
             self.rect.center = self.center
-        else:
+        elif self.origin is not None:
             self.rect = pg.Rect(self.origin[0], self.origin[1], bg_width, bg_height)
 
     def draw(self, screen: pg.Surface) -> None:

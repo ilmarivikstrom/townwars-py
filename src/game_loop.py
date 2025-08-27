@@ -68,7 +68,7 @@ class GameLoop:
             pass
         self.phase_display.draw(self.screen)
 
-    def loop(self, fps: int = 60) -> None:
+    def loop(self, fps: int = 60) -> None:  # noqa: C901
         while True:
             for event in pg.event.get():
                 if self.state.game_phase == Phase.MAIN_MENU:

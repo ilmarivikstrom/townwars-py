@@ -5,7 +5,7 @@ from src.component import Component
 
 
 class Button(Component):
-    def __init__(
+    def __init__(  # noqa: PLR0913
         self,
         on_click: callable,
         origin: tuple[int, int] | None = None,
@@ -33,8 +33,8 @@ class Button(Component):
 
         self.is_hovered = False
         self.font = pg.font.Font(pg.font.match_font("monospace"), font_size)
-        self.text_surface = None
-        self.background_surface = None
+        self.text_surface: pg.Surface | None = None
+        self.background_surface: pg.Surface | None = None
         self.rect = pg.Rect(0, 0, 0, 0)
 
         self._update_surfaces()
@@ -69,7 +69,7 @@ class Button(Component):
             self.background_surface = None
             if self.center is not None:
                 self.rect = pg.Rect(self.center[0], self.center[1], 0, 0)
-            else:
+            elif self.origin is not None:
                 self.rect = pg.Rect(self.origin[0], self.origin[1], 0, 0)
             return
 
@@ -115,7 +115,7 @@ class Button(Component):
         if self.center is not None:
             self.rect = pg.Rect(0, 0, bg_width, bg_height)
             self.rect.center = self.center
-        else:
+        elif self.origin is not None:
             self.rect = pg.Rect(self.origin[0], self.origin[1], bg_width, bg_height)
 
     def set_center(self, center: tuple[int, int]) -> None:

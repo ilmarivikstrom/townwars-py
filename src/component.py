@@ -13,5 +13,5 @@ class Component(ABC):
         """Update component state (e.g., position, animations)."""
 
     @abstractmethod
-    def draw(self, surface: pg.Surface) -> None:
+    def draw(self, screen: pg.Surface) -> None:
         """Draw the component to the given surface."""
