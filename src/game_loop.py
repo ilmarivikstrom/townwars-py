@@ -45,7 +45,7 @@ class GameLoop:
         self.exit = Exit()
 
     def _update_debug_displays(self) -> None:
-        fps_text = f"frame: {self.state.current_frame}\nfps: {self.clock.get_fps():.1f}\ntime: {pg.time.get_ticks() / 1000:.1f}s\ndt: {self.clock.get_time():.1f}ms"  # noqa: E501
+        fps_text = f"frame: {self.state.current_frame}\nfps: {self.clock.get_fps():.1f}\ntime: {pg.time.get_ticks() / 1000:.1f}s\ndt: {self.clock.get_time():.1f}ms"
         self.fps_display.set_text(fps_text)
         self.fps_display.draw(self.screen)
 
@@ -58,7 +58,7 @@ class GameLoop:
             )
         elif self.state.game_phase == Phase.GAMEPLAY:
             self.phase_display.set_text(
-                "Phase: Gameplay\n\nPress ESC to return to main menu",
+                "Phase: Gameplay\n\nPress LMB to place a town\nPress ESC to return to main menu",
             )
         elif self.state.game_phase == Phase.EDITOR:
             self.phase_display.set_text(
